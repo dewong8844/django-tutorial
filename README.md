@@ -1,4 +1,5 @@
 # Django Tutorial Video Series on youtube
+[Link to django class @ pythonprogramming.net](https://pythonprogramming.net/django-web-development-with-python-intro/)
 
 ## Part 1: Install django and test 
 [Link to video](https://www.youtube.com/watch?v=FNQxxpM1yOs&t=627s)
@@ -343,4 +344,30 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 ```
+
+## Part 7: Add view and template to blog
+[Link to video](https://www.youtube.com/watch?v=uGsmuCjZBSU)
+
+Add blog to mysite/urls.py, use django generic views instead of models.py  
+The posts are reverse sorted and limited to 25 posts
+```python
+from django.confs.urls import url, include
+from django.views.generic import ListView, DetailView
+from blog.models import Post
+
+urlpatterns = [ url(r'^$', ListView.as_view(queryset=Post.objects.all().order_by("-date")[:25], template_name="blog/blog.html"))]
+```
+
+Create templates/blog/blog.html, display posts with date
+```
+{% extends "personal/header.html" %}
+
+(% block content %}
+    {% for post in object_list %}
+    <h5>{{ post.date|date:"Y-m-d" }}<a href=
+                    "/blog/{{post.id}}"> {{post.title}} </h5>
+    {% endfor %}
+{% endblock %}
+```
+
 
