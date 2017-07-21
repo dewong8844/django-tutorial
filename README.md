@@ -351,7 +351,7 @@ class Post(models.Model):
 Add blog to mysite/urls.py, use django generic views instead of models.py  
 The posts are reverse sorted and limited to 25 posts
 ```python
-from django.confs.urls import url, include
+from django.conf.urls import url, include
 from django.views.generic import ListView, DetailView
 from blog.models import Post
 
@@ -371,7 +371,7 @@ Create templates/blog/blog.html, display posts with date
 ## Part 8: Database and migrations
 [Link to video](https://www.youtube.com/watch?v=hU5QSQt6yQc)
 
-Always think of migrations when models and DBs are used  
+Always think of migrations when using models and DBs
   
 First run a migrate on mysite
 ```
@@ -394,7 +394,7 @@ Running migrations:
   Applying sessions.0001_initial... OK
 ```
 
-###Steps to migrate:
+### Steps to migrate:
 1. Makemigrations: look at the models that need migration and create the migrations
 ```
 $ python3 manage.py makemigrations
@@ -434,4 +434,27 @@ $ python3 manage.py runserver
 Browse to the URL http://localhost:8000/, the blog link shows a blank page  
 This is good, since it verifies it went thru all the blog app logic  
 A blog page will display only after blog posts are created using admin.
+
+## Part 9: The admin app
+[Link to video](https://www.youtube.com/watch?v=xVAbW1G64bM)
+
+Before the admin app can be used, need to create the admin, super-user.
+```
+$ python3 manage.py createsuperuser
+```
+
+Start the server and browse to the URL http://localhost:8000/admin,
+now you can login to the admin account.
+
+Next, we let admin know about post, add the post model to mysite/blog/admin.py
+```python
+from django.contrib import admin
+from blog.models import Post
+
+admin.site.register(Post)
+```
+
+Now browsing to the admin page will show Posts under BLOG,  
+and we can add or edit the posts.
+
 
