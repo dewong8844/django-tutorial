@@ -262,8 +262,8 @@ def contact(request):
 
 Second, create a basic.html file in templates/personal directory  
 This is where the strings in views content is passed from python to html
-```python
-% extends "personal/header.html" %}
+```
+{% extends "personal/header.html" %}
 
 {% block content %}
     {% for c in content %}
@@ -296,3 +296,51 @@ urlpatterns = [
     url(r'^', include('personal.urls')),
 ]
 ```
+
+## Part 6: Beginning the blog
+[Link to video](https://www.youtube.com/watch?v=uI2KW8K_eks)
+
+Start at the top level, create a new app blog
+```
+    $ cd mysite
+    $ python3 manage.py startapp blog
+```
+
+Install the app (add entry 'blog' to settings.py INSTALLED_APPS)
+```python
+INSTALLED_APPS = [
+    'personal',
+    'blog',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+```
+Add blog URL to ./mysite/urls.py to point to blog
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^', include('personal.urls')),
+    url(r'^blog/', include('blog.urls')),
+]
+```
+
+Create the data model, edit mysite/blog/models.py
+```python
+from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=140)
+    body = models.TextField()
+    date = models.DateTimeField()
+    
+    def __str__(self):
+        return self.title
+```
+
