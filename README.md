@@ -73,7 +73,7 @@ urlpatterns = [
 
 Start the app on the server
 ```
-$ cd mysite/webapp
+$ cd mysite
 $ python3 manage.py runserver
 ```
 
@@ -177,7 +177,7 @@ Create a home.html file that extends header.html
 
 Start the app on the server
 ```
-$ cd mysite/personal
+$ cd mysite
 $ python3 manage.py runserver
 ```
 
@@ -361,13 +361,77 @@ urlpatterns = [ url(r'^$', ListView.as_view(queryset=Post.objects.all().order_by
 Create templates/blog/blog.html, display posts with date
 ```
 {% extends "personal/header.html" %}
-
-(% block content %}
+{% block content %}
     {% for post in object_list %}
-    <h5>{{ post.date|date:"Y-m-d" }}<a href=
-                    "/blog/{{post.id}}"> {{post.title}} </h5>
+        <h5>{{ post.date|date:"Y-m-d" }}<a href="/blog/{{post.id}}">  {{ post.title }}</a></h5>
     {% endfor %}
 {% endblock %}
 ```
 
+## Part 8: Database and migrations
+[Link to video](https://www.youtube.com/watch?v=hU5QSQt6yQc)
+
+Always think of migrations when models and DBs are used  
+  
+First run a migrate on mysite
+```
+$ python3 manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying sessions.0001_initial... OK
+```
+
+###Steps to migrate:
+1. Makemigrations: look at the models that need migration and create the migrations
+```
+$ python3 manage.py makemigrations
+Migrations for 'blog':
+  blog/migrations/0001_initial.py
+    - Create model Post
+
+```
+
+2. Create the database using sqlmigrate command  
+   The result is the sql command to create the blog_post table
+```
+$ python3 manage.py sqlmigrate blog 0001
+BEGIN;
+--
+-- Create model Post
+--
+CREATE TABLE "blog_post" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "title" varchar(140) NOT NULL, "body" text NOT NULL, "date" datetime NOT NULL);
+COMMIT;
+```
+
+3. Finally, run the migration
+```
+$python3 manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, blog, contenttypes, sessions
+Running migrations:
+  Applying blog.0001_initial... OK
+```
+
+Start the app on the server
+```
+$ cd mysite
+$ python3 manage.py runserver
+```
+
+Browse to the URL http://localhost:8000/, the blog link shows a blank page  
+This is good, since it verifies it went thru all the blog app logic  
+A blog page will display only after blog posts are created using admin.
 
