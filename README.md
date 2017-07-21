@@ -458,3 +458,32 @@ Now browsing to the admin page will show Posts under BLOG,
 and we can add or edit the posts.
 
 
+## Part 10: Individual blog pages
+[Link to video](https://www.youtube.com/watch?v=W66TcJ7i-Bk)
+
+After adding posts using admin app, individual pages couldn't be viewed  
+The problem was that blog/urls didn't have pattern to handle blog/<number>  
+
+Add a new pattern to blog/urls.py
+```python
+from django.conf.urls import url, include
+from django.views.generic import ListView, DetailView
+from blog.models import Post
+
+urlpatterns = [ url(r'^$', ListView.as_view(
+                  queryset=Post.objects.all().order_by("-date")[:25],
+                  template_name="blog/blog.html")), 
+                url(r'^(?P<pk>\d+)$', DetailView.as_view(model=Post,
+                  template_name="blog/post.html"))]
+```
+
+Create the file templates/blog/post.html
+```
+{% extends "personal/header.html" %}
+{% block content %}
+        <h3>{{post.title}}</h3>
+        <h6>{{post.date}}</h6>
+        {{post.body|safe|linebreaks}}
+{% endblock %}
+```
+The "filter" safe in Jinja allows using HTML tags in the post
