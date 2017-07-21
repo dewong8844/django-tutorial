@@ -201,3 +201,43 @@ Create the new include file htmlsnippet.html in the templates/personal/includes 
 ```
 
 Refresh web page on browser http://localhost:8000/ and see the included content
+
+## Part 4: Use Bootstrap to add style to HTML/CSS
+[Link to video](https://www.youtube.com/watch?v=p8qpu9WscFU)
+
+### Pre-requisites
+
+Download bootstrap from http://getbootstrap.com/getting-started/#download
+*NOTE: tutorial author recommends perusing CSS, Components, and Javascript tabs of the Bootstrap website*
+
+Copy all directories under bootstrap-3.x.y-dist into static
+```
+$ mkdir static; cd static
+$ cp ~/Downloads/bootstrap-3.3.7-dist/* .
+```
+
+Add the static files from bootstrap in header.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dennis Wong</title>
+    <meta charset="utf-8"/>
+    {% load staticfiles %}
+    <link rel='stylesheet' href="{% static 'css/bootstrap.min.css' %}"
+     type='text/css'/>
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>
+```
+
+The tutorial lesson has a more complicated version of header.html that includes more bootstrap components that makes the web page mobile friendly.
