@@ -216,6 +216,8 @@ $ mkdir static; cd static
 $ cp ~/Downloads/bootstrap-3.3.7-dist/* .
 ```
 
+### Add bootstrap style to the website
+
 Add the static files from bootstrap in header.html
 
 ```html
@@ -241,3 +243,56 @@ Add the static files from bootstrap in header.html
 ```
 
 The tutorial lesson has a more complicated version of header.html that includes more bootstrap components that makes the web page mobile friendly.
+
+## Part 5: Passing variables from python to HTML in Jinja
+[Link to video](https://www.youtube.com/watch?v=nWRboXrcipU#t=1.932872701)
+
+Create a contact page to illustrate passing variables from python to HTML, this is done using a basic.html file.
+
+First, edit views.py and add a contact function
+```python
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'personal/home.html')
+
+def contact(request):
+    return render(request, 'personal/basic.html', {'content':['If you would like to contact me, please email me','hskinsley@gmail.com']})
+```
+
+Second, create a basic.html file in templates/personal directory  
+This is where the strings in views content is passed from python to html
+```python
+% extends "personal/header.html" %}
+
+{% block content %}
+    {% for c in content %}
+        <p>{{c}}</p>
+    {% endfor %}
+
+{% endblock %}
+```
+
+Next, edit personal/urls.py, add the contact pattern
+```python
+from django.conf.urls import url, include
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+    url(r'^contact/', views.contact, name='contact'),
+]
+```
+
+At this point, if we try to click contact, there is an error 404,  
+The error can be fixed by removing the $ in the r'^$' pattern  
+in mysite/urls.py
+```python
+from django.conf.urls import url, include
+from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^', include('personal.urls')),
+]
+```
