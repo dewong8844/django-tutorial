@@ -486,4 +486,42 @@ Create the file templates/blog/post.html
         {{post.body|safe|linebreaks}}
 {% endblock %}
 ```
-The "filter" safe in Jinja allows using HTML tags in the post
+The "filter" safe in Jinja allows using HTML tags in the post  
+Safe should be used with caution, it may allow end-users to run scripts  
+Ok in this case since the posts are created from the admin page.
+
+
+## Part 11: Publishing to a web server
+[Link to video](https://www.youtube.com/watch?v=Y-CT_l1dnVU)
+
+In this video, the author goes over how to publish to Digital Ocean  
+using nginx as the underlying web server.
+
+Each deployment is a separate case depending on the requirements and  
+the provider used.
+
+For a simple development server, adding the IP address + port to  
+the runserver command allows access from clients outside localhost
+
+Add the hostname or IP address in the settings.py ALLOWED_HOSTS
+```
+ALLOWED_HOSTS = ['192.168.1.104']
+```
+
+Start the server using the hostname or IP address
+```
+python3 manage.py runserver 192.168.1.104:8000
+```
+
+By the way, don't forget to set DEBUG = Flase in settings.py for production.
+
+## Part 12: SSL for HTTPS with nginx in django deployment
+[Link to video](https://www.youtube.com/watch?v=z0L3u2Vn3Wo)
+
+The nugget in this lesson is https://letsencrypt.org, there are instructions to setup nginx with letsencrypt on [Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04) and [16.04](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04).
+
+After I finished watching the series, found a good tutorial and  
+free online ebook for [Django TDD unit-test](http://www.obeythetestinggoat.com/pages/book.html)
+
+* NOTE: this tutorial didn't cover REST API using django, *
+* need to investigate [Django REST framework](http://www.django-rest-framework.org)
